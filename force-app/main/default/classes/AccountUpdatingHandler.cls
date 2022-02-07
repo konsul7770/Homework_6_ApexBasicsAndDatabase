@@ -9,7 +9,8 @@ public class AccountUpdatingHandler {
         List<User> orgUsers = [SELECT 
             Id,
             Name 
-            FROM User];
+            FROM User
+            WHERE isActive = true];
         List<Account> accountsFromOrg = [SELECT
             Id,
             Name,
