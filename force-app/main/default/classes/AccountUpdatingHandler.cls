@@ -1,9 +1,9 @@
 public class AccountUpdatingHandler {
     @invocableMethod(Label='Assign Tasks' Description='Assigning tasks related to accounts to users')
-    public static void assignTasksToUsers(List<InputProps> inputs) {
+    public static void assignTasksToUsers(List<Account> accounts) {
         Set<Id> accountIds = new Set<Id>();
-        for (InputProps input : inputs) {
-            accountIds.add(input.updatedAccounts[0].Id);
+        for (Account accont : accounts) {
+            accountIds.add(accont.Id);
         }
         List<Task> updatingTasks = new List<Task>();
         List<User> orgUsers = [
@@ -11,7 +11,7 @@ public class AccountUpdatingHandler {
                 Id,
                 Name 
             FROM User
-            WHERE isActive = true];
+            WHERE isActive = true AND UserType != 'CsnOnly' AND UserType != 'AutomatedProcess'];
         List<Task> relatedTasks = [
             SELECT 
                 Id, 
@@ -21,14 +21,11 @@ public class AccountUpdatingHandler {
             WHERE WhatId IN :accountIds
         ];
         Map<Id,List<Task>> accountIdsWithRespondedTasks = new Map<Id,List<Task>>();
-        for (Id curId : accountIds) {
-            List<Task> tasks = new List<Task>();
-            for (Task tsk : relatedTasks) {
-                if (curId == tsk.WhatId) {
-                    tasks.add(tsk);
-                }
+        for (Task tsk : relatedTasks) {
+            if (!accountIdsWithRespondedTasks.containsKey(tsk.WhatId)) {
+                accountIdsWithRespondedTasks.put(tsk.WhatId,new List<Task>());
             }
-            accountIdsWithRespondedTasks.put(curId,tasks);
+            accountIdsWithRespondedTasks.get(tsk.WhatId).add(tsk);
         }
         for (Id accountId : accountIdsWithRespondedTasks.keySet()) {
             if (accountIdsWithRespondedTasks.get(accountId).Size() > 3) {
@@ -45,9 +42,5 @@ public class AccountUpdatingHandler {
         } catch (Exception e) {
             System.debug(e.getMessage());
         }
-    }
-    public class InputProps {
-        @invocablevariable
-        public List<Account> updatedAccounts;
     }
 }
