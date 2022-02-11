@@ -1,11 +1,11 @@
-List<User> users = [SELECT Id, Name
+List<User> users = [SELECT Id, Name, UserType
 FROM User
-WHERE isActive=true];
+WHERE isActive=true AND UserType != 'CsnOnly' AND UserType != 'AutomatedProcess'];
 for (User u : users) {
-    System.debug(u.Name);
+    System.debug(u.Name+' user type '+u.UserType);
 }
-Account accont1 = new Account(Name='Account test update1');
-Account accont2 = new Account(Name='Account test update2');
+Account accont1 = new Account(Name='Account test create1');
+Account accont2 = new Account(Name='Account test create2');
 List<Account> accountList = new List<Account>();
 accountList.add(accont1);
 accountList.add(accont2);
@@ -38,7 +38,7 @@ List<Account> accFromOrg = [
     WHERE Name LIKE 'Account test update%'
 ];
 for (Account accont : accFromOrg) {
-    accont.Name = accont.Name.substring(0,20) + ' edited';
+    accont.Name = accont.Name.substring(0,20) + ' changed';
 }
 update accFromOrg;
 
