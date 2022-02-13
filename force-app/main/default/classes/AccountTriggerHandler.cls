@@ -30,7 +30,7 @@ public with sharing class AccountTriggerHandler {
         for (String accont : accountsIdsAndNames) {
             Task newTask = new Task();
             Integer separatorIndex = accont.indexOf(';');
-            newTask.Subject = 'Nogotiation with '+accont.substring(separatorIndex+1, (accont.length()-1)-separatorIndex);
+            newTask.Subject = 'Nogotiation with '+accont.substring(separatorIndex+1);
             newTask.Priority = 'Normal';
             newTask.Status = 'Open';
             newTask.WhatId = (Id) accont.substring(0,separatorIndex);
