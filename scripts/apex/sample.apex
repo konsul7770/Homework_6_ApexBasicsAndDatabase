@@ -42,9 +42,20 @@ for (Account accont : accFromOrg) {
 }
 update accFromOrg;
 
-[
-    SELECT Count(Id)
-    FROM Task
-    GROUP BY WhatId
-    HAVING Count(Id) > 3]
 
+
+List<Task> tasks = [
+    SELECT Id, WhatId, Account.Owner.Name
+    FROM Task
+];
+for (Task t : tasks) {
+    System.debug(t.Account.Owner.Name);
+}
+
+Id BatchJobId = Database.executeBatch(new TasksAndAccountsFieldsUpdaterBatch());
+
+List<Account> accs = [select Name, BillingAddress from Account];
+for (Account  ac : accs) {
+    System.debug(ac.Name+' '+ac.BillingAddress);
+}
+Id BatchJobId1 = Database.executeBatch(new ContactsAndAccountsFieldsUpdaterBatch());
