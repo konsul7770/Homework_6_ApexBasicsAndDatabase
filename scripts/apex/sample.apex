@@ -59,3 +59,8 @@ for (Account  ac : accs) {
     System.debug(ac.Name+' '+ac.BillingAddress);
 }
 Id BatchJobId1 = Database.executeBatch(new ContactsAndAccountsFieldsUpdaterBatch());
+
+AccountsAndContactsFuture.updateRelatedContacts();
+
+Sch
+System.Schedule('job-name','0 30 0 * * * ?', )

@@ -5,19 +5,19 @@ public class AccountsAndContactsQueable implements Queueable {
             FROM Account
             LIMIT 150
         ];
-        Set<Id> contactsIds = new Set<Id>();
+        Set<Id> accountIds = new Set<Id>();
         for (Account accont : accounts) {
             if (accont.BillingCity != null || accont.BillingCountry != null ||
             accont.BillingLatitude != null || accont.BillingLongitude != null ||
             accont.BillingPostalCode != null || accont.BillingState != null ||
             accont.BillingStreet != null) {
-                contactsIds.add(accont.Id);
+                accountIds.add(accont.Id);
             }
         }
         List<Contact> contactsToUpdate = [
             SELECT Id, LastName, Is_Synced__c, Processed_By_Queue__c
             FROM Contact
-            WHERE AccountId IN :contactsIds
+            WHERE AccountId IN :accountIds
         ];
         for (Contact cont : contactsToUpdate) {
             cont.Is_Synced__c = false;

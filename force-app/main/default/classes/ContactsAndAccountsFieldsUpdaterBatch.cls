@@ -22,7 +22,7 @@ public class ContactsAndAccountsFieldsUpdaterBatch implements Database.Batchable
         }
         try {
             update contactsToUpdate;
-            update accountsToUpdate;
+            update new Map<Id,Account>(accountsToUpdate).values();
         } catch (DMLException e) {
             System.debug(e.getMessage());
         }

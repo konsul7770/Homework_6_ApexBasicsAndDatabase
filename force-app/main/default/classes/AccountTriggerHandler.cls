@@ -1,10 +1,6 @@
 public with sharing class AccountTriggerHandler {
     public static void onInsertAccounts(Map<Id,Account> accounts) {
-        List<String> accountsIdsAndNames = new List<String>();
-        for (Id accontId : accounts.keySet()) {
-            accountsIdsAndNames.add(accontId+';'+accounts.get(accontId).Name);
-        }
-        AccountTriggerHandler.tasksCreationMethod(accountsIdsAndNames);
+        AccountTriggerHandler.tasksCreationMethod(accounts.keySet());
     }
 
     public static void onUpdateAccounts(Map<Id,Account> oldVerAccounts, Map<Id,Account> newVerAccounts) {
@@ -25,15 +21,19 @@ public with sharing class AccountTriggerHandler {
         Id jobId = System.enqueueJob(updCont);
     }
     @future
-    public static void tasksCreationMethod(List<String> accountsIdsAndNames) {
+    public static void tasksCreationMethod(Set<Id> accountsIds) {
+        List<Account> accounts = [
+            SELECT Id, Name
+            FROM Account
+            WHERE Id IN :accountsIds
+        ];
         List<Task> tasksList = new List<Task>();
-        for (String accont : accountsIdsAndNames) {
+        for (Account accont : accounts) {
             Task newTask = new Task();
-            Integer separatorIndex = accont.indexOf(';');
-            newTask.Subject = 'Nogotiation with '+accont.substring(separatorIndex+1);
+            newTask.Subject = 'Nogotiation with '+accont.Name;
             newTask.Priority = 'Normal';
             newTask.Status = 'Open';
-            newTask.WhatId = (Id) accont.substring(0,separatorIndex);
+            newTask.WhatId = accont.Id;
             newTask.Is_Synced__c = false;
             tasksList.add(newTask);
         }
