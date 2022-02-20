@@ -41,10 +41,27 @@ for (Account accont : accFromOrg) {
     accont.Name = accont.Name.substring(0,20) + ' changed';
 }
 update accFromOrg;
+// remote accounts task
+RemoteAccountsManager.getTargetAccounts();
 
-[
-    SELECT Count(Id)
-    FROM Task
-    GROUP BY WhatId
-    HAVING Count(Id) > 3]
+List<Account> accs = new List<Account>();
+for(Integer i = 0; i<2; i++) {
+    Account accont = new Account(Name='Test remote'+i+1);
+    accs.add(accont);
+}
+RemoteAccountsManager.createTargetAccount(accs);
 
+List<Id> ids = new List<Id>();
+ids.add('0015g00000fZ1GkAAK');
+ids.add('0015g00000fZ1GjAAK');
+RemoteAccountsManager.deleteTargetAccount(ids);
+
+List<Account> putAccounts = new List<Account>();
+putAccounts.add(new Account(Name='Test put method'));
+putAccounts.add(new Account(Id='0015g00000fZ03RAAS',Name='changed by upsert'));
+RemoteAccountsManager.upsertTargetAccount(putAccounts);
+
+
+List<Account> patchAccount = new List<Account>();
+patchAccount.add(new Account(Id='0015g00000fZ0h2AAC',Name='valid name'));
+RemoteAccountsManager.updateTargetAccount(patchAccount);
