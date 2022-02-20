@@ -3,6 +3,9 @@
     {
       "path": "force-app",
       "default": true
+    },
+    {
+      "path": "force-app-target"
     }
   ],
   "name": "homework_6_ApexBasicsAndDatabase",
