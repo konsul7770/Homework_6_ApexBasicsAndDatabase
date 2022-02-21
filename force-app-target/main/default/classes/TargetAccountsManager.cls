@@ -5,60 +5,43 @@ global with sharing class TargetAccountsManager {
         return [
             SELECT Id, Name
             FROM Account
-            LIMIT 200
         ];
     }
     @HttpPost
-    global static List<Account> createAccount() {
+    global static void createAccount() {
         RestRequest request = RestContext.request;
+        RestResponse response = RestContext.response;
         List<Account> accounts = (List<Account>)JSON.deserialize(request.requestBody.toString(), List<Account>.Class);
         Database.SaveResult[] results = Database.insert(accounts,false);
-        return savedRecords(results, accounts);
+        response.responseBody = Blob.valueOf(JSON.serialize(results));
     }
     @HttpDelete
     global static void deleteAccount() {
         RestRequest Request = RestContext.request;
+        RestResponse response = RestContext.response;
         List<Id> accountIds = (List<Id>)JSON.deserialize(request.requestBody.toString(), List<Id>.Class);
         List<Account> deletingAccounts = [
             SELECT Id
             FROM Account
             WHERE Id IN :accountIds
         ];
-        if (!deletingAccounts.isEmpty()) {
-            delete deletingAccounts;
-        }
+        Database.DeleteResult[] results = Database.Delete(deletingAccounts,false);
+        response.responseBody = Blob.valueOf(JSON.serialize(results));
     }
     @HttpPut
-    global static List<Account> upsertTargetAccount() {
+    global static void upsertTargetAccount() {
         RestRequest request = RestContext.request;
+        RestResponse response = RestContext.response;
         List<Account> accounts = (List<Account>)JSON.deserialize(request.requestBody.toString(), List<Account>.Class);
         Database.UpsertResult[] results = Database.upsert(accounts,false);
-        Integer i = 0;
-        List<Account> upsertAccounts = new List<Account>();
-        for (Database.UpsertResult upRes : results) {
-            if (upRes.isSuccess()) {
-                upsertAccounts.add(accounts.get(i));
-            }
-            i++;
-        }
-        return upsertAccounts;
+        response.responseBody = Blob.valueOf(JSON.serialize(results));
     }
     @HttpPatch
-    global static List<Account> updateTargetAccount() {
+    global static void updateTargetAccount() {
         RestRequest request = RestContext.request;
+        RestResponse response = RestContext.response;
         List<Account> accounts = (List<Account>)JSON.deserialize(request.requestBody.toString(), List<Account>.Class);
         Database.SaveResult[] results = Database.update(accounts,false);
-        return savedRecords(results, accounts);
-    }
-    private static List<Account> savedRecords(Database.SaveResult[] results,List<Account> accounts) {
-        Integer i = 0;
-        List<Account> savedAccounts = new List<Account>();
-        for (Database.SaveResult sr : results) {
-            if (sr.isSuccess()) {
-                savedAccounts.add(accounts.get(i));
-            }
-            i++;
-        }
-        return savedAccounts;
+        response.responseBody = Blob.valueOf(JSON.serialize(results));
     }
 }

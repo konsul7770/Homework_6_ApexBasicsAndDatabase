@@ -58,10 +58,49 @@ public with sharing class RemoteAccountsManager {
             return;
         }
         if (response.getStatusCode() == 200) {
-            if (httpMethod != 'DELETE') {
-                List<Account> accountsFromRemoteOrg = (List<Account>)JSON.deserialize(response.getBody(), List<Account>.Class);
-                for (Account accont : accountsFromRemoteOrg) {
-                    System.debug('Id: '+accont.Id+' Name: '+accont.Name);
+            if (httpMethod == 'GET') {
+                List<Account> responseAccounts = (List<Account>)JSON.deserialize(response.getBody(), List<Account>.Class);
+                for (Account account : responseAccounts) {
+                    System.debug('Id: '+account.Id+' Name: '+account.Name);
+                }
+            }
+            if (httpMethod == 'POST' || httpMethod == 'PATCH') {
+                Database.SaveResult[] saveResult = (Database.SaveResult[])JSON.deserialize(response.getBody(), Database.SaveResult[].Class);
+                for (Database.SaveResult sr : saveResult) {
+                    if (sr.isSuccess()) {
+                        System.debug('Id: '+sr.getId()+' successfuly saved');
+                    } else {
+                        System.debug('Id: '+sr.getId()+' saving failed');
+                        for (Database.Error srError : sr.errors) {
+                            System.debug(srError.getMessage());
+                        }
+                    }
+                }
+            }
+            if (httpMethod == 'PUT') {
+                Database.UpsertResult[] upsertResult = (Database.UpsertResult[])JSON.deserialize(response.getBody(), Database.UpsertResult[].Class);
+                for (Database.UpsertResult upres : upsertResult) {
+                    if (upres.isSuccess()) {
+                        System.debug('Id: '+upres.getId()+' successfuly upsert');
+                    } else {
+                        System.debug('Id: '+upres.getId()+' upserting failed');
+                        for (Database.Error upresError : upres.errors) {
+                            System.debug(upresError.getMessage());
+                        }
+                    }
+                }
+            }
+            if (httpMethod == 'DELETE') {
+                Database.DeleteResult[] deleteResult = (Database.DeleteResult[])JSON.deserialize(response.getBody(), Database.DeleteResult[].Class);
+                for (Database.DeleteResult dr : deleteResult) {
+                    if (dr.isSuccess()) {
+                        System.debug('Id: '+dr.getId()+' successfuly deleted');
+                    } else {
+                        System.debug('Id: '+dr.getId()+' deliting failed');
+                        for (Database.Error drError : dr.errors) {
+                            System.debug(drError.getMessage());
+                        }
+                    }
                 }
             }
         }
