@@ -19,26 +19,26 @@ public with sharing class RemoteAccountsManager {
         }
         return null;
     }
-    public static void getTargetAccounts() {
-        formRequest(null, null, 'GET');
+    public static HttpResponse getTargetAccounts() {
+        return formRequest(null, null, 'GET');
     }
-    public static void createTargetAccount(List<Account> accounts) {
-        formRequest(accounts, null, 'POST');
+    public static HttpResponse createTargetAccount(List<Account> accounts) {
+        return formRequest(accounts, null, 'POST');
     }
-    public static void deleteTargetAccount(List<Id> accountIds) {
-        formRequest(null, accountIds, 'DELETE');
+    public static HttpResponse deleteTargetAccount(List<Id> accountIds) {
+        return formRequest(null, accountIds, 'DELETE');
     }
-    public static void upsertTargetAccount(List<Account> accounts) {
-        formRequest(accounts, null, 'PUT');
+    public static HttpResponse upsertTargetAccount(List<Account> accounts) {
+        return formRequest(accounts, null, 'PUT');
     }
-    public static void updateTargetAccount(List<Account> accounts) {
-        formRequest(accounts, null, 'PATCH');
+    public static HttpResponse updateTargetAccount(List<Account> accounts) {
+        return formRequest(accounts, null, 'PATCH');
     }
-    private static void formRequest(List<Account> accounts, List<Id> accountIds, String httpMethod) {
+    private static HttpResponse formRequest(List<Account> accounts, List<Id> accountIds, String httpMethod) {
         Map<String,String> authObj = getAuthenticationToken();
         if (authObj==null) {
             System.debug('Authorisation failed');
-            return;
+            return null;
         }
         HttpRequest request = new HttpRequest();
         Http http = new Http();
@@ -49,13 +49,14 @@ public with sharing class RemoteAccountsManager {
         request.setMethod(httpMethod);
         if (httpMethod == 'POST'|| httpMethod == 'PUT' || httpMethod == 'PATCH') {
             request.setBody(JSON.serialize(accounts));
-        } else if (httpMethod == 'DELETE') {
+        }
+        if (httpMethod == 'DELETE') {
             request.setBody(JSON.serialize(accountIds));
         }
         HttpResponse response = http.send(request);
         if (response.getStatusCode() != 200) {
             System.debug('Fetch data from remote org failed');
-            return;
+            return response;
         }
         if (response.getStatusCode() == 200) {
             if (httpMethod == 'GET') {
@@ -104,5 +105,6 @@ public with sharing class RemoteAccountsManager {
                 }
             }
         }
+        return response;
     }
 }
