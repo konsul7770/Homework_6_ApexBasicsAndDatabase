@@ -29,12 +29,11 @@ public class ContactsQueryLocatorBatch implements Database.Batchable<SObject> {
                 accountsToUpdate.add(accont);
             }
         }
-        try {
-            update contactsToUpdate;
-            update accountsToUpdate;
-        } catch (DMLException e) {
-            System.debug(e.getMessage());
-        }
+        Map<Id,Account> accountsMap = new Map<Id,Account>();
+        accountsMap.putAll(accountsToUpdate);
+
+        update contactsToUpdate;
+        update accountsMap.values();
     }
     public void finish(Database.BatchableContext bc) {
         

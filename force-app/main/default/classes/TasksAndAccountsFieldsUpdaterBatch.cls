@@ -1,7 +1,7 @@
 public class TasksAndAccountsFieldsUpdaterBatch implements Database.Batchable<SObject> {
     public Database.QueryLocator start(Database.BatchableContext bc) {
         return Database.getQueryLocator(
-            'SELECT Id, WhatId, Is_Synced__c, Account.Owner.Name, Account.Updated_By_Task__c '+
+            'SELECT Id, WhatId, Is_Synced__c, Account_Owner__c, Account.Owner.Name, Account.Updated_By_Task__c '+
             'FROM Task '+
             'WHERE Is_Synced__c = false'
         );
@@ -19,12 +19,11 @@ public class TasksAndAccountsFieldsUpdaterBatch implements Database.Batchable<SO
                 accountsToUpdate.add(accont);
             }
         }
-        try {
-            update tasks;
-            update accountsToUpdate;
-        } catch (DMLException e) {
-            System.debug(e.getMessage());
-        }
+        Map<Id,Account> accountsMap = new Map<Id,Account>();
+        accountsMap.putAll(accountsToUpdate);
+
+        update tasks;
+        update accountsMap.values();
     }
     public void finish(Database.BatchableContext bc) {
 

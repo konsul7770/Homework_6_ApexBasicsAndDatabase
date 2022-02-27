@@ -16,9 +16,11 @@ public with sharing class AccountTriggerHandler {
                     accountsIds.add(curId);
             }
         }
-        //editRelatedContactsFutureMethod(accountsIds);
-        UpdateRelatedtoAcccountsContacts updCont = new UpdateRelatedtoAcccountsContacts(accountsIds);
-        Id jobId = System.enqueueJob(updCont);
+        if (!accountsIds.isEmpty()) {
+            //editRelatedContactsFutureMethod(accountsIds);
+            UpdateRelatedtoAcccountsContacts updCont = new UpdateRelatedtoAcccountsContacts(accountsIds);
+            Id jobId = System.enqueueJob(updCont);
+        }
     }
     @future
     public static void tasksCreationMethod(Set<Id> accountsIds) {
@@ -37,11 +39,7 @@ public with sharing class AccountTriggerHandler {
             newTask.Is_Synced__c = false;
             tasksList.add(newTask);
         }
-        try {
-            insert tasksList;
-        } catch (Exception e) {
-            System.debug(e.getMessage());
-        }
+        insert tasksList;
     }
     @future
     public static void editRelatedContactsFutureMethod(Set<Id> accountIds) {

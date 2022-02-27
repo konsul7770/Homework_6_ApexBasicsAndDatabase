@@ -16,16 +16,18 @@ public class ContactsAndAccountsFieldsUpdaterBatch implements Database.Batchable
             cont.MailingStreet = cont.Account.BillingStreet;
             contactsToUpdate.add(cont);
             if (cont.AccountId != null) {
-                Account accont = new Account(Id = cont.AccountId, Updated_By_Contact__c = true);
+                Account accont = new Account();
+                accont.Id = cont.AccountId;
+                accont.Updated_By_Contact__c = true;
                 accountsToUpdate.add(accont);
             }
         }
-        try {
-            update contactsToUpdate;
-            update new Map<Id,Account>(accountsToUpdate).values();
-        } catch (DMLException e) {
-            System.debug(e.getMessage());
-        }
+        Map<Id,Account> acccountsMap = new Map<Id,Account>();
+        acccountsMap.putAll(accountsToUpdate);
+
+        update contactsToUpdate;
+        update acccountsMap.values();
+
     }
     public void finish(Database.BatchableContext bc) {
 

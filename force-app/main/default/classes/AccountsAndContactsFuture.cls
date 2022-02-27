@@ -24,15 +24,6 @@ public class AccountsAndContactsFuture {
             cont.Is_Synced__c = false;
             cont.Processed_By_Future__c = true;
         }
-        Database.SaveResult[] results = Database.update(contactsToUpdate, false);
-        Integer i = 0;
-        for (Database.SaveResult res : results) {
-            if (!res.isSuccess()) {
-                for (Database.Error resError : res.getErrors()) {
-                    System.debug(contactsToUpdate.get(i).Id+' '+resError.getMessage());
-                }
-            }
-            i++;
-        }
+        update contactsToUpdate;
     }
 }

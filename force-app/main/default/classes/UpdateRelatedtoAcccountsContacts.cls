@@ -12,10 +12,8 @@ public class UpdateRelatedtoAcccountsContacts implements Queueable{
             cont.Is_Synced__c = false;
             cont.Processed_By_Queue__c = true;
         }
-        try {
-            update relatedContacts;
-        } catch (Exception e) {
-            System.debug(e.getMessage());
-        }
+
+        update relatedContacts;
+
     }
 }

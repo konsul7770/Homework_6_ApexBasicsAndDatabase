@@ -23,10 +23,6 @@ public class AccountsAndContactsQueable implements Queueable {
             cont.Is_Synced__c = false;
             cont.Processed_By_Queue__c = true;
         }
-        try {
-            update contactsToUpdate;
-        } catch (DMLException e) {
-            System.debug(e.getMessage());
-        }
+        update contactsToUpdate;
     } 
 }
