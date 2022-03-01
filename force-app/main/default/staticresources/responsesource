@@ -1,0 +1,20 @@
+[
+    {
+        "attributes":
+        {
+            "type":"Account",
+            "url":"/services/data/v52.0/sobjects/Account/1"
+        },
+        "Id":"1",
+        "Name":"Target Test account06"
+    },
+    {
+        "attributes":
+        {
+            "type":"Account",
+            "url":"/services/data/v52.0/sobjects/Account/2"
+        },
+        "Id":"2",
+        "Name":"Target Test account36"
+    }
+]

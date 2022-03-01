@@ -45,23 +45,28 @@ update accFromOrg;
 RemoteAccountsManager.getTargetAccounts();
 
 List<Account> accs = new List<Account>();
-for(Integer i = 0; i<2; i++) {
-    Account accont = new Account(Name='Test remote'+i+1);
-    accs.add(accont);
-}
+accs.add(new Account(Name = 'post1 test12345'));
+//accs.add(new Account(Description = 'description'));
+//accs.add(new Account(Id = '0015g00000fZ061AAC',Name = 'tats'));
 RemoteAccountsManager.createTargetAccount(accs);
 
 List<Id> ids = new List<Id>();
-ids.add('0015g00000fZ1GkAAK');
-ids.add('0015g00000fZ1GjAAK');
+ids.add('0015g00000WSdVSAA1');
+ids.add('0015g00000WSdVSAA1');
+ids.add(null);
 RemoteAccountsManager.deleteTargetAccount(ids);
 
+
 List<Account> putAccounts = new List<Account>();
-putAccounts.add(new Account(Name='Test put method'));
-putAccounts.add(new Account(Id='0015g00000fZ03RAAS',Name='changed by upsert'));
+putAccounts.add(new Account(Name = 'new account'));
+putAccounts.add(new Account(Description = 'description'));
+putAccounts.add(new Account(Id='0015g00000fZ061AAC',Name='putnamechange'));
+putAccounts.add(new Account(Id='0015g00000fZ064AAC',Name = ''));
 RemoteAccountsManager.upsertTargetAccount(putAccounts);
 
 
 List<Account> patchAccount = new List<Account>();
-patchAccount.add(new Account(Id='0015g00000fZ0h2AAC',Name='valid name'));
+patchAccount.add(new Account(Id='0015g00000fZ061AAC',Name='valid name'));
+patchAccount.add(new Account(Id='0015g00000fZ064AAC',Name = ''));
+patchAccount.add(new Account(Name = 'patch'));
 RemoteAccountsManager.updateTargetAccount(patchAccount);

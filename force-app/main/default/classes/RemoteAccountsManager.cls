@@ -1,5 +1,5 @@
 public with sharing class RemoteAccountsManager {
-    private static Map<String,String> getAuthenticationToken() {
+    public static Map<String,String> getAuthenticationToken() {
         String AccessToken = null;
         Id profileId = UserInfo.getProfileId();
         Authentification_Settings__c authSettings = Authentification_Settings__c.getInstance(profileId);

@@ -1,0 +1,8 @@
+{
+    "access_token": "00D5g00000DAcNn!AQ8AQJLFAQfAX0HO3T9LzsuV38LZgfXIt9LM4CsvadJ4S_IThpc30z.AQ_5KsVVy9yPo831Wq4rObppTXhIgJ.yWWBpTIeHI",
+    "instance_url": "https://thecompany-6b-dev-ed.my.salesforce.com",
+    "id": "https://login.salesforce.com/id/00D5g00000DAcNnEAL/0055g00000CmDcgAAF",
+    "token_type": "Bearer",
+    "issued_at": "1645962744951",
+    "signature": "O/X+4R0iLu6QhkjIri+HmCnr88PkaQvqCf6cmF4MT9E="
+}
