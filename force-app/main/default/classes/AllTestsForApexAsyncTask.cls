@@ -127,4 +127,41 @@ public with sharing class AllTestsForApexAsyncTask {
         }
         System.assertEquals(5,tasksAfterBatch.size());
     }
+    //ScheduleBatchJobs
+    @isTest
+    static void ScheduleBatchJobsTest() {
+        String CRON_EXP = '0 30 * * * ?';
+        String JOB_NAME = 'ScheduledBatches';
+        Test.startTest();
+        List<Account> accounts = TestDataFactory.ACCOUNT.createAccountsList(20, 'testname', true);
+        List<Contact> contacts = TestDataFactory.CONTACT.createContactsList(0, 'contactname', accounts, true);
+        List<Task> tasks = TestDataFactory.TASK.createTasksList(accounts, 1);
+        Id jobId = System.schedule(JOB_NAME, CRON_EXP, new ScheduleBatchJobs());
+        CronTrigger ct = [
+            SELECT Id, CronExpression, TimesTriggered, NextFireTime
+            FROM CronTrigger 
+            WHERE id = :jobId];
+        System.assertEquals(CRON_EXP, ct.CronExpression);
+        System.assertEquals(0, ct.TimesTriggered);
+        System.assertEquals('2022-03-01 12:30:00', String.valueOf(ct.NextFireTime));
+        Test.stopTest();
+    }
+    @isTest
+    static void ScheduleTaskContactsBatchesTest(){
+        String CRON_EXP = '0 30 * * * ?';
+        String JOB_NAME = 'ScheduleTaskContactsBatches';
+        Test.startTest();
+        List<Account> accounts = TestDataFactory.ACCOUNT.createAccountsList(20, 'testname', true);
+        List<Contact> contacts = TestDataFactory.CONTACT.createContactsList(0, 'contactname', accounts, true);
+        List<Task> tasks = TestDataFactory.TASK.createTasksList(accounts, 1);
+        Id jobId = System.schedule(JOB_NAME, CRON_EXP, new ScheduleTaskContactsBatches());
+        CronTrigger ct = [
+            SELECT Id, CronExpression, TimesTriggered, NextFireTime
+            FROM CronTrigger 
+            WHERE id = :jobId];
+        System.assertEquals(CRON_EXP, ct.CronExpression);
+        System.assertEquals(0, ct.TimesTriggered);
+        System.assertEquals('2022-03-01 12:30:00', String.valueOf(ct.NextFireTime));
+        Test.stopTest();
+    }
 }
