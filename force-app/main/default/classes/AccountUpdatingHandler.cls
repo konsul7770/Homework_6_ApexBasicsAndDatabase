@@ -37,10 +37,6 @@ public class AccountUpdatingHandler {
                 }
             }
         }
-        try {
-            update updatingTasks;
-        } catch (Exception e) {
-            System.debug(e.getMessage());
-        }
+        update updatingTasks;
     }
 }

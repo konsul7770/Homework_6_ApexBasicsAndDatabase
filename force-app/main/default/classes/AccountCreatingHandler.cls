@@ -10,10 +10,6 @@ public class AccountCreatingHandler {
             newTask.WhatId = accont.Id;
             tasksList.add(newTask);
         }
-        try {
-            insert tasksList;
-        } catch (Exception e) {
-            System.debug(e.getMessage());
-        }
+        insert tasksList;
     }
 }
