@@ -161,7 +161,7 @@ public with sharing class AllTestsForApexAsyncTask {
             WHERE id = :jobId];
         System.assertEquals(CRON_EXP, ct.CronExpression);
         System.assertEquals(0, ct.TimesTriggered);
-        System.assertEquals('2022-03-01 12:30:00', String.valueOf(ct.NextFireTime));
+        System.assertEquals('2022-03-03 01:30:00', String.valueOf(ct.NextFireTime));
         Test.stopTest();
     }
 }
